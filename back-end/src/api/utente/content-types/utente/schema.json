@@ -1,0 +1,18 @@
+{
+  "kind": "collectionType",
+  "collectionName": "utentes",
+  "info": {
+    "singularName": "utente",
+    "pluralName": "utentes",
+    "displayName": "utente"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "data": {
+      "type": "json"
+    }
+  }
+}
