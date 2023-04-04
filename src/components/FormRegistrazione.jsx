@@ -7,7 +7,6 @@ const FormRegistrazione = () => {
   const [day, setDay] = useState("");
   const [month, setMonth] = useState("");
   const [year, setYear] = useState("");
-  console.log(year);
 
   const giorni = Array.from({ length: 31 }, (_, index) => 1 + index);
   const mesi = [
