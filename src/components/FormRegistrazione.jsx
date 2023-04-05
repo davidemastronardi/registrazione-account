@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 const FormRegistrazione = () => {
   const [name, setName] = useState("");
@@ -7,7 +7,12 @@ const FormRegistrazione = () => {
   const [day, setDay] = useState("");
   const [month, setMonth] = useState("");
   const [year, setYear] = useState("");
-  const [dataCompleta,setDataCompleta] = useState(day + month + year);
+  const [email, setEmail] = useState("");
+  const [dataCompleta, setDataCompleta] = useState("");
+
+  useEffect(() => {
+    setDataCompleta(day + " " + month + " " + year);
+  }, [day, month, year]);
 
   const giorni = Array.from({ length: 31 }, (_, index) => 1 + index);
   const mesi = [
@@ -25,19 +30,18 @@ const FormRegistrazione = () => {
     "Dicembre",
   ];
   const anni = Array.from({ length: 104 }, (_, index) => 1920 + index);
-  
   const handleSubmit = () => {
     const data = {
-      data:{
-        nome: name,
-        cognome: lastName,
-        password: newPassword,
-        
-      }
-      
+      blocked: false,
+      confirmed: true,
+      username: name,
+      email: email,
+      data: dataCompleta,
+      password: newPassword,
+      role:1
     };
 
-    fetch("http://localhost:1337/api/utentes", {
+    fetch(process.env.REACT_APP_BASE_PATH + "/users", {
       method: "POST", // *GET, POST, PUT, DELETE, etc.
       headers: {
         "Content-Type": "application/json",
@@ -47,7 +51,9 @@ const FormRegistrazione = () => {
       .then((res) => {
         return res.json();
       })
-      .then((response) => {});
+      .then((response) => {
+        console.log(response);
+      });
   };
 
   return (
@@ -69,6 +75,15 @@ const FormRegistrazione = () => {
             onChange={(e) => setLastName(e.target.value)}
             className="p-2 rounded"
             type="text"
+          />
+        </div>
+        <div className="flex flex-col gap-2">
+          <label htmlFor="email">Email</label>
+          <input
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="p-2 rounded"
+            type="email"
           />
         </div>
         <div className="flex flex-col gap-2">
