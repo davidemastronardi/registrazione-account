@@ -68,6 +68,12 @@
     },
     "data": {
       "type": "string"
+    },
+    "nome": {
+      "type": "string"
+    },
+    "cognome": {
+      "type": "string"
     }
   }
 }

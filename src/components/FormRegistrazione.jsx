@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 
 const FormRegistrazione = () => {
   const [name, setName] = useState("");
+  const [userName, setUserName] = useState("");
   const [lastName, setLastName] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [day, setDay] = useState("");
@@ -34,7 +35,9 @@ const FormRegistrazione = () => {
     const data = {
       blocked: false,
       confirmed: true,
-      username: name,
+      username: userName,
+      nome: name,
+      cognome: lastName,
       email: email,
       data: dataCompleta,
       password: newPassword,
@@ -59,6 +62,16 @@ const FormRegistrazione = () => {
   return (
     <div className="w-full h-screen flex justify-center items-center">
       <div className="w-[500px] bg-slate-300 rounded-2xl p-5 flex flex-col gap-5">
+        <div className="flex flex-col gap-2">
+          <label htmlFor="username">Username</label>
+          <input
+            value={userName}
+            onChange={(e) => setUserName(e.target.value)}
+            className="p-2 rounded"
+            type="text"
+          />
+          <p className="text-md text-red-600">Questo username è gia stato usato.</p>
+        </div>
         <div className="flex flex-col gap-2">
           <label htmlFor="nome">Nome</label>
           <input
@@ -85,6 +98,7 @@ const FormRegistrazione = () => {
             className="p-2 rounded"
             type="email"
           />
+          <p className="text-md text-red-600">Sei già registrato con questa email.</p>
         </div>
         <div className="flex flex-col gap-2">
           <label htmlFor="password">Nuova password</label>
@@ -94,6 +108,7 @@ const FormRegistrazione = () => {
             className="p-2 rounded"
             type="password"
           />
+          <p className="text-md text-red-600">La password deve contenere almeno 6 caratteri.</p>
         </div>
         <div className=" w-full flex justify-between gap-5">
           <div className="w-1/3 flex flex-col gap-2">
@@ -145,7 +160,7 @@ const FormRegistrazione = () => {
         </div>
         <div>
           <button onClick={() => handleSubmit()} className="btn btn-primary">
-            Accedi
+            Registrati
           </button>
         </div>
       </div>
