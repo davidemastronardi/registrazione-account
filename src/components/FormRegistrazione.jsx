@@ -10,6 +10,11 @@ const FormRegistrazione = () => {
   const [year, setYear] = useState("");
   const [email, setEmail] = useState("");
   const [dataCompleta, setDataCompleta] = useState("");
+  const [response, setResponse] = useState(null);
+
+  const [errorUserName, setErrorUsername] = useState(true);
+  const [errorEmail, setErrorEmail] = useState(true);
+  const [errorPassword, setErrorPassword] = useState(true);
 
   useEffect(() => {
     setDataCompleta(day + " " + month + " " + year);
@@ -41,7 +46,7 @@ const FormRegistrazione = () => {
       email: email,
       data: dataCompleta,
       password: newPassword,
-      role:1
+      role: 1,
     };
 
     fetch(process.env.REACT_APP_BASE_PATH + "/users", {
@@ -55,109 +60,125 @@ const FormRegistrazione = () => {
         return res.json();
       })
       .then((response) => {
-        console.log(response);
+        setResponse(response);
       });
+  };
+
+  const getErrors = (name) => {
+    const errors = response?.error?.details?.errors??null;
+    const error=errors?.find((item)=>{
+
+      return item.path[0]==name
+    })
+    return error?.message??null
+
   };
 
   return (
     <div className="w-full h-screen flex justify-center items-center">
       <div className="w-[500px] bg-slate-300 rounded-2xl p-5 flex flex-col gap-5">
-        <div className="flex flex-col gap-2">
-          <label htmlFor="username">Username</label>
-          <input
-            value={userName}
-            onChange={(e) => setUserName(e.target.value)}
-            className="p-2 rounded"
-            type="text"
-          />
-          <p className="text-md text-red-600">Questo username è gia stato usato.</p>
-        </div>
-        <div className="flex flex-col gap-2">
-          <label htmlFor="nome">Nome</label>
-          <input
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            className="p-2 rounded"
-            type="text"
-          />
-        </div>
-        <div className="flex flex-col gap-2">
-          <label htmlFor="cognome">Cognome</label>
-          <input
-            value={lastName}
-            onChange={(e) => setLastName(e.target.value)}
-            className="p-2 rounded"
-            type="text"
-          />
-        </div>
-        <div className="flex flex-col gap-2">
-          <label htmlFor="email">Email</label>
-          <input
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="p-2 rounded"
-            type="email"
-          />
-          <p className="text-md text-red-600">Sei già registrato con questa email.</p>
-        </div>
-        <div className="flex flex-col gap-2">
-          <label htmlFor="password">Nuova password</label>
-          <input
-            value={newPassword}
-            onChange={(e) => setNewPassword(e.target.value)}
-            className="p-2 rounded"
-            type="password"
-          />
-          <p className="text-md text-red-600">La password deve contenere almeno 6 caratteri.</p>
-        </div>
-        <div className=" w-full flex justify-between gap-5">
-          <div className="w-1/3 flex flex-col gap-2">
-            <label htmlFor="giorno">Data di nascita</label>
-            <select
-              onChange={(e) => setDay(e.target.value)}
+        <form action="">
+          <div className="flex flex-col gap-2">
+            <label htmlFor="username">Username</label>
+            <input
+              required
+              value={userName}
+              onChange={(e) => setUserName(e.target.value)}
               className="p-2 rounded"
-              name="giorni"
-              id=""
-            >
-              <option value=""></option>
-              {giorni.map((giorno, index) => (
-                <option value={giorno} key={index}>
-                  {giorno}
-                </option>
-              ))}
-            </select>
+              type="text"
+            />
+            {/* {response?.error&&getErrors("username")} */}
+            {getErrors("username")}
           </div>
-          <div className="w-1/3 flex flex-col justify-end gap-2">
-            <select
-              onChange={(e) => setMonth(e.target.value)}
+          <div className="flex flex-col gap-2">
+            <label htmlFor="nome">Nome</label>
+            <input
+              value={name}
+              onChange={(e) => setName(e.target.value)}
               className="p-2 rounded"
-              name="mesi"
-              id=""
-            >
-              <option value=""></option>
-              {mesi.map((mese, index) => (
-                <option value={mese} key={index}>
-                  {mese}
-                </option>
-              ))}
-            </select>
+              type="text"
+            />
           </div>
-          <div className="w-1/3 flex flex-col justify-end gap-2">
-            <select
-              onChange={(e) => setYear(e.target.value)}
+          <div className="flex flex-col gap-2">
+            <label htmlFor="cognome">Cognome</label>
+            <input
+              value={lastName}
+              onChange={(e) => setLastName(e.target.value)}
               className="p-2 rounded"
-              name="anni"
-              id=""
-            >
-              <option value=""></option>
-              {anni.reverse().map((anno, index) => (
-                <option value={anno} key={index}>
-                  {anno}
-                </option>
-              ))}
-            </select>
+              type="text"
+            />
           </div>
-        </div>
+          <div className="flex flex-col gap-2">
+            <label htmlFor="email">Email</label>
+            <input
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="p-2 rounded"
+              type="email"
+            />
+          {getErrors("email")}
+          </div>
+          <div className="flex flex-col gap-2">
+            <label htmlFor="password">Nuova password</label>
+            <input
+              value={newPassword}
+              onChange={(e) => setNewPassword(e.target.value)}
+              className="p-2 rounded"
+              type="password"
+            />
+            {getErrors("password")}
+          </div>
+          <div className=" w-full flex justify-between gap-5">
+            <div className="w-1/3 flex flex-col gap-2">
+              <label htmlFor="giorno">Data di nascita</label>
+              <select
+                onChange={(e) => setDay(e.target.value)}
+                className="p-2 rounded"
+                name="giorni"
+                id=""
+              >
+                <option value=""></option>
+                {giorni.map((giorno, index) => (
+                  <option value={giorno} key={index}>
+                    {giorno}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="w-1/3 flex flex-col justify-end gap-2">
+              <select
+                onChange={(e) => setMonth(e.target.value)}
+                className="p-2 rounded"
+                name="mesi"
+                id=""
+              >
+                <option value=""></option>
+                {mesi.map((mese, index) => (
+                  <option value={mese} key={index}>
+                    {mese}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="w-1/3 flex flex-col justify-end gap-2">
+              <select
+                onChange={(e) => setYear(e.target.value)}
+                className="p-2 rounded"
+                name="anni"
+                id=""
+              >
+                <option value=""></option>
+                {anni.reverse().map((anno, index) => (
+                  <option value={anno} key={index}>
+                    {anno}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+          {response?.error.name=="ApplicationError"&&response?.error.message}
+        </form>
+
         <div>
           <button onClick={() => handleSubmit()} className="btn btn-primary">
             Registrati
