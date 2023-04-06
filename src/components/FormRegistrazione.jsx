@@ -70,14 +70,14 @@ const FormRegistrazione = () => {
 
       return item.path[0]==name
     })
-    return error?.message??null
+    return <p className="text-red-500">{error?.message??null}</p>
 
   };
 
   return (
     <div className="w-full h-screen flex justify-center items-center">
-      <div className="w-[500px] bg-slate-300 rounded-2xl p-5 flex flex-col gap-5">
-        <form action="">
+      <div className="w-[500px] bg-slate-300 rounded-2xl p-5">
+        <form className="flex flex-col gap-3" action="">
           <div className="flex flex-col gap-2">
             <label htmlFor="username">Username</label>
             <input
@@ -93,6 +93,7 @@ const FormRegistrazione = () => {
           <div className="flex flex-col gap-2">
             <label htmlFor="nome">Nome</label>
             <input
+            required
               value={name}
               onChange={(e) => setName(e.target.value)}
               className="p-2 rounded"
@@ -102,6 +103,7 @@ const FormRegistrazione = () => {
           <div className="flex flex-col gap-2">
             <label htmlFor="cognome">Cognome</label>
             <input
+             required
               value={lastName}
               onChange={(e) => setLastName(e.target.value)}
               className="p-2 rounded"
@@ -111,6 +113,7 @@ const FormRegistrazione = () => {
           <div className="flex flex-col gap-2">
             <label htmlFor="email">Email</label>
             <input
+             required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="p-2 rounded"
@@ -121,6 +124,7 @@ const FormRegistrazione = () => {
           <div className="flex flex-col gap-2">
             <label htmlFor="password">Nuova password</label>
             <input
+             required
               value={newPassword}
               onChange={(e) => setNewPassword(e.target.value)}
               className="p-2 rounded"
@@ -132,6 +136,7 @@ const FormRegistrazione = () => {
             <div className="w-1/3 flex flex-col gap-2">
               <label htmlFor="giorno">Data di nascita</label>
               <select
+               required
                 onChange={(e) => setDay(e.target.value)}
                 className="p-2 rounded"
                 name="giorni"
@@ -147,6 +152,7 @@ const FormRegistrazione = () => {
             </div>
             <div className="w-1/3 flex flex-col justify-end gap-2">
               <select
+               required
                 onChange={(e) => setMonth(e.target.value)}
                 className="p-2 rounded"
                 name="mesi"
@@ -162,6 +168,7 @@ const FormRegistrazione = () => {
             </div>
             <div className="w-1/3 flex flex-col justify-end gap-2">
               <select
+               required
                 onChange={(e) => setYear(e.target.value)}
                 className="p-2 rounded"
                 name="anni"
@@ -177,13 +184,13 @@ const FormRegistrazione = () => {
             </div>
           </div>
           {response?.error.name=="ApplicationError"&&response?.error.message}
-        </form>
-
         <div>
-          <button onClick={() => handleSubmit()} className="btn btn-primary">
+          <button onClick={() => handleSubmit()} className="btn btn-primary mt-1">
             Registrati
           </button>
         </div>
+        </form>
+
       </div>
     </div>
   );
