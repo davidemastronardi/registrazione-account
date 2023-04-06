@@ -5,13 +5,15 @@ const FormLogin = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [openError, setOpenError]=useState(true);
 
   const handleSubmit = () => {
     const data = {
-        identifier: "mastronardi_davide@hotmail.it",
-        password: "villacanale14492"
+      identifier: email,
+      password: password,
     };
-    fetch(process.env.REACT_APP_BASE_PATH + "auth/local", {
+
+    fetch(process.env.REACT_APP_BASE_PATH + "/auth/local", {
       method: "POST", // *GET, POST, PUT, DELETE, etc.
       headers: {
         "Content-Type": "application/json",
@@ -19,15 +21,28 @@ const FormLogin = () => {
       body: JSON.stringify(data),
     })
       .then((res) => {
+      
         return res.json();
       })
+      .then((data) => {
+        console.log(data);
+        if (data.hasOwnProperty("jwt")) {
+          navigate("/home")
+        }
+        if (data !== 200 ) {
+          setOpenError(!openError)
+        }
+      });
   };
-
 
   return (
     <div className="w-full h-screen flex justify-center items-center">
       <div>
-        <form className="w-[500px] bg-slate-300 rounded-2xl p-5 flex flex-col gap-5" action="">
+      {!openError&&<h1 className="text-red-500 p-4">Email e/o password non corretti.</h1>}
+        <form
+          className="w-[500px] bg-slate-300 rounded-2xl p-5 flex flex-col gap-5"
+          action=""
+        >
           <div className="flex flex-col gap-2">
             <label htmlFor="email">Inserisci la tua e-mail</label>
             <input
@@ -47,7 +62,9 @@ const FormLogin = () => {
             />
           </div>
           <div>
-            <button onClick={()=> handleSubmit()} className="btn btn-primary">Accedi</button>
+            <button type="button" onClick={() => handleSubmit("pino")} className="btn btn-primary">
+              Accedi
+            </button>
             <p className="text-blue-500 text-center mt-5 hover:cursor-pointer">
               Password dimenticata?
             </p>
@@ -57,6 +74,7 @@ const FormLogin = () => {
           </div>
           <div>
             <button
+            type="button"
               onClick={() => navigate("/registrazione")}
               className="btn btn-secondary"
             >

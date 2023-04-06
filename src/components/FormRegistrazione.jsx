@@ -37,6 +37,20 @@ const FormRegistrazione = () => {
   ];
   const anni = Array.from({ length: 104 }, (_, index) => 1920 + index);
   const handleSubmit = () => {
+    if (
+      !name ||
+      !userName ||
+      !lastName ||
+      !newPassword ||
+      !day ||
+      !month ||
+      !year ||
+      !email ||
+      !dataCompleta
+    ) {
+      return
+    }
+
     const data = {
       blocked: false,
       confirmed: true,
@@ -49,6 +63,7 @@ const FormRegistrazione = () => {
       role: 1,
     };
 
+    console.log("test");
     fetch(process.env.REACT_APP_BASE_PATH + "/users", {
       method: "POST", // *GET, POST, PUT, DELETE, etc.
       headers: {
@@ -65,13 +80,11 @@ const FormRegistrazione = () => {
   };
 
   const getErrors = (name) => {
-    const errors = response?.error?.details?.errors??null;
-    const error=errors?.find((item)=>{
-
-      return item.path[0]==name
-    })
-    return <p className="text-red-500">{error?.message??null}</p>
-
+    const errors = response?.error?.details?.errors ?? null;
+    const error = errors?.find((item) => {
+      return item.path[0] == name;
+    });
+    return <p className="text-red-500">{error?.message ?? null}</p>;
   };
 
   return (
@@ -93,7 +106,7 @@ const FormRegistrazione = () => {
           <div className="flex flex-col gap-2">
             <label htmlFor="nome">Nome</label>
             <input
-            required
+              required
               value={name}
               onChange={(e) => setName(e.target.value)}
               className="p-2 rounded"
@@ -103,7 +116,7 @@ const FormRegistrazione = () => {
           <div className="flex flex-col gap-2">
             <label htmlFor="cognome">Cognome</label>
             <input
-             required
+              required
               value={lastName}
               onChange={(e) => setLastName(e.target.value)}
               className="p-2 rounded"
@@ -113,18 +126,18 @@ const FormRegistrazione = () => {
           <div className="flex flex-col gap-2">
             <label htmlFor="email">Email</label>
             <input
-             required
+              required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="p-2 rounded"
               type="email"
             />
-          {getErrors("email")}
+            {getErrors("email")}
           </div>
           <div className="flex flex-col gap-2">
             <label htmlFor="password">Nuova password</label>
             <input
-             required
+              required
               value={newPassword}
               onChange={(e) => setNewPassword(e.target.value)}
               className="p-2 rounded"
@@ -136,7 +149,7 @@ const FormRegistrazione = () => {
             <div className="w-1/3 flex flex-col gap-2">
               <label htmlFor="giorno">Data di nascita</label>
               <select
-               required
+                required
                 onChange={(e) => setDay(e.target.value)}
                 className="p-2 rounded"
                 name="giorni"
@@ -152,7 +165,7 @@ const FormRegistrazione = () => {
             </div>
             <div className="w-1/3 flex flex-col justify-end gap-2">
               <select
-               required
+                required
                 onChange={(e) => setMonth(e.target.value)}
                 className="p-2 rounded"
                 name="mesi"
@@ -168,7 +181,7 @@ const FormRegistrazione = () => {
             </div>
             <div className="w-1/3 flex flex-col justify-end gap-2">
               <select
-               required
+                required
                 onChange={(e) => setYear(e.target.value)}
                 className="p-2 rounded"
                 name="anni"
@@ -183,14 +196,20 @@ const FormRegistrazione = () => {
               </select>
             </div>
           </div>
-          {response?.error.name=="ApplicationError"&&response?.error.message}
-        <div>
-          <button onClick={() => handleSubmit()} className="btn btn-primary mt-1">
-            Registrati
-          </button>
-        </div>
-        </form>
 
+          {response &&
+            response?.error?.name == "ApplicationError" &&
+            response?.error?.message}
+          <div>
+            <button
+            type="button"
+              onClick={() => handleSubmit()}
+              className="btn btn-primary mt-1"
+            >
+              Registrati
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   );
